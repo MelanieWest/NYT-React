@@ -11,8 +11,8 @@ class Articles extends Component {
   state = {
     articles: [],
     title: "",
-    author: "",
-    synopsis: ""
+    link: "",
+    saved: ""
   };
 
   componentDidMount() {
@@ -22,7 +22,7 @@ class Articles extends Component {
   loadArticles = () => {
     API.getArticles()
       .then(res =>
-        this.setState({ articles: res.data, title: "", saved: "" })
+        this.setState({ articles: res.data, title: "", saved: false })
       )
       .catch(err => console.log(err));
   };
@@ -40,18 +40,26 @@ class Articles extends Component {
     });
   };
 
-  // handleFormSubmit = event => {
-  //   event.preventDefault();
-  //   if (this.state.title && this.state.author) {
-  //     API.saveBook({
-  //       title: this.state.title,
-  //       author: this.state.author,
-  //       synopsis: this.state.synopsis
-  //     })
-  //       .then(res => this.loadBooks())
-  //       .catch(err => console.log(err));
-  //   }
-  // };
+  handleFormSubmit = event => {
+    event.preventDefault();
+      API.saveArticle({
+        title: this.state.title,
+        link: this.state.link,
+        saved: true
+      })
+        .then(res => this.loadBooks())
+        .catch(err => console.log(err));
+    }
+
+    handleFindNew = event => {
+      event.preventDefault();
+        API.getNew({
+          date: Date.now,
+          saved: false
+        })
+          .then(res => this.loadBooks())
+          .catch(err => console.log(err));
+      }
 
   render() {
     return (
@@ -59,38 +67,18 @@ class Articles extends Component {
         <Row>
           <Col size="md-6">
             <Jumbotron>
-              <h1>My Reading List</h1>
+              <h1>Articles to Read</h1>
             </Jumbotron>
-            {/* <form>
-              <Input
-                value={this.state.title}
-                onChange={this.handleInputChange}
-                name="title"
-                placeholder="Title (required)"
-              />
-              <Input
-                value={this.state.author}
-                onChange={this.handleInputChange}
-                name="author"
-                placeholder="Author (required)"
-              />
-              <TextArea
-                value={this.state.synopsis}
-                onChange={this.handleInputChange}
-                name="synopsis"
-                placeholder="Synopsis (Optional)"
-              />
-              <FormBtn
-                disabled={!(this.state.author && this.state.title)}
-                onClick={this.handleFormSubmit}
-              >
-                Submit Book
-              </FormBtn>
-            </form> */}
+
           </Col>
           <Col size="md-6">
             <Jumbotron>
-              <h1>Articles Found</h1>
+              <h1>Found Articles</h1>
+              <FormBtn
+                onClick={this.handleFindNew}>
+                Find New
+              </FormBtn>
+
             </Jumbotron>
             {this.state.articles.length ? (
               <List>
@@ -98,10 +86,16 @@ class Articles extends Component {
                   <ListItem key={article._id}>
                     <Link to={"/articles/" + article._id}>
                       <strong>
-                        {article.title} by {article.link}
+                        {article.title} by {article.author}
                       </strong>
                     </Link>
                     <DeleteBtn onClick={() => this.deleteArticle(article._id)} />
+                    <FormBtn
+                      onClick={this.handleFormSubmit}
+                    >
+                      Save
+                    </FormBtn>
+
                   </ListItem>
                 ))}
               </List>
@@ -112,7 +106,8 @@ class Articles extends Component {
         </Row>
       </Container>
     );
-  }
-}
+  };
+};
+
 
 export default Articles;

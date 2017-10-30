@@ -5,6 +5,9 @@ export default {
   getArticles: function() {
     return axios.get("/api/articles");
   },
+  getNew: function() {
+    return axios.get("/api/articles/nyt");
+  }, 
   // Gets the book with the given id
   getArticle: function(id) {
     return axios.get("/api/articles/" + id);

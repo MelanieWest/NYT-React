@@ -15,4 +15,9 @@ router
   .put(booksController.update)
   .delete(booksController.remove);
 
+//Matches with "/api/articles/nyt"
+router
+  .route("/nyt")
+  .get(booksController.findNew);
+
 module.exports = router;
