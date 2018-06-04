@@ -39,6 +39,34 @@ module.exports = {
 
   findNew: function(req, res) {
 
+    // Thanks for registering for a New York Times API Key. 
+    // Here's your API Key for the Article Search API: 733117e7d060402baea1826bc01f23a6 
+    // If you have any questions, email us at code@nytimes.com
+
+
+    // var url = "https://api.nytimes.com/svc/topstories/v2/home.json";
+    // url += '?' + $.param({
+    //   'api-key': "733117e7d060402baea1826bc01f23a6"
+    // });
+    // $.ajax({
+    //   url: url,
+    //   method: 'GET',
+    // }).done(function(data) {
+    //   data.results.each(function(i,element){
+    //     db.Article.create({
+    //       link: data.results.url,
+    //       title: data.results.title
+    //   })
+    //   console.log(data.results);
+ 
+    // }).then(function(dbArticle){
+    //   res.send("scrape complete");
+
+    // }).fail(function(err) {
+    //   throw err;
+    // });
+
+
     request("http://www.nytimes.com/",function(error, response, html) {
       // Then, we load that into cheerio and save it to $ for a shorthand selector
       var $ = cheerio.load(html);
